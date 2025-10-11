@@ -1,0 +1,96 @@
+"""MCP Client setup and management for LangGraph ReAct Agent."""
+
+import logging
+from typing import Any, Callable, Dict, List, cast
+
+from langchain_mcp_adapters.client import (  # type: ignore[import-untyped]
+    MultiServerMCPClient,
+)
+
+logger = logging.getLogger(__name__)
+
+# Global MCP client and tools cache
+_mcp_client: MultiServerMCPClient | None = None
+_mcp_tools_cache: List[Callable[..., Any]] = []
+
+# MCP Server configurations
+MCP_SERVERS = {
+    "deepwiki": {
+        "url": "https://mcp.deepwiki.com/mcp",
+        "transport": "streamable_http",
+    },
+    "mysql": {
+        "transport": "stdio",
+        "command": "uvx",
+        "args": [
+            "--from",
+            "mysql-mcp-server",
+            "mysql_mcp_server"
+        ],
+        "env": {
+            "MYSQL_HOST": "gz-cdb-6bvgywyv.sql.tencentcdb.com",
+            "MYSQL_PORT": "24452",
+            "MYSQL_USER": "root",
+            "MYSQL_PASSWORD": "McpTestDB123",
+            "MYSQL_DATABASE": "image_214"
+        }
+    }
+}
+
+
+async def get_mcp_client(
+    server_configs: Dict[str, Any] | None = None,
+) -> MultiServerMCPClient | None:
+    """Get or initialize the global MCP client with given server configurations."""
+    global _mcp_client
+
+    if _mcp_client is None:
+        configs = server_configs or MCP_SERVERS
+        try:
+            _mcp_client = MultiServerMCPClient(
+                configs
+            )  # pyright: ignore[reportArgumentType]
+            logger.info(f"Initialized MCP client with servers: {list(configs.keys())}")
+        except Exception as e:
+            logger.error("Failed to initialize MCP client: %s", e)
+            return None
+    return _mcp_client
+
+
+async def get_mcp_tools(
+    server_configs: Dict[str, Any] | None = None,
+) -> List[Callable[..., Any]]:
+    """Get MCP tools for a specific server, initializing client if needed."""
+    global _mcp_tools_cache
+
+    # Return cached tools if available
+    if _mcp_tools_cache:
+        return _mcp_tools_cache
+
+    try:
+        client = await get_mcp_client(server_configs)
+        if client is None:
+            return []
+
+        # Get all tools and filter by server (if tools have server metadata)
+        all_tools = await client.get_tools()
+        tools = cast(List[Callable[..., Any]], all_tools)
+
+        _mcp_tools_cache = tools
+        logger.info(f"Loaded {len(tools)} tools from MCP server.")
+        for idx, tool in enumerate(tools):
+            logger.info(
+                f"Tool {idx+1}: {getattr(tool, 'name', 'Unknown')}, {getattr(tool, 'description', 'No description')}"
+            )
+        return tools
+    except Exception as e:
+        logger.warning("Failed to load tools from MCP server: %s", e)
+        _mcp_tools_cache = []
+        return []
+
+
+def clear_mcp_cache() -> None:
+    """Clear the MCP client and tools cache (useful for testing)."""
+    global _mcp_client, _mcp_tools_cache
+    _mcp_client = None
+    _mcp_tools_cache = []
