@@ -82,7 +82,7 @@ async def plan_step(
     
     plan = await planner.ainvoke({"input": input_text, "system_time": datetime.now(tz=UTC).isoformat()})
     plan_str = "\n".join(
-        f"{step}" for i, step in enumerate(state.plan)
+        f"{step}" for i, step in enumerate(plan.steps)
     )
     return {
         "input": input_text,
@@ -142,10 +142,10 @@ async def execute_step(
     response = await executor.ainvoke(
         {"messages": [HumanMessage(content=task_formatted)]}
     )
-
+    response_content = response["messages"][-1].content
     return {
-        "past_steps": [(task, response["messages"][-1].content)],
-        "messages": [AIMessage(content=plan_str)]
+        "past_steps": [(task, response_content)],
+        "messages": [AIMessage(content=response_content)]
     }
 
 async def replan_step(
