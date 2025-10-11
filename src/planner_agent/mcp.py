@@ -19,22 +19,6 @@ MCP_SERVERS = {
         "url": "https://mcp.deepwiki.com/mcp",
         "transport": "streamable_http",
     },
-    "mysql": {
-        "transport": "stdio",
-        "command": "uvx",
-        "args": [
-            "--from",
-            "mysql-mcp-server",
-            "mysql_mcp_server"
-        ],
-        "env": {
-            "MYSQL_HOST": "gz-cdb-6bvgywyv.sql.tencentcdb.com",
-            "MYSQL_PORT": "24452",
-            "MYSQL_USER": "root",
-            "MYSQL_PASSWORD": "McpTestDB123",
-            "MYSQL_DATABASE": "image_214"
-        }
-    }
 }
 
 
