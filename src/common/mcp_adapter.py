@@ -1,7 +1,8 @@
 """MCP Client setup and management for LangGraph ReAct Agent."""
 
 import logging
-from typing import Any, Callable, Dict, List, cast
+import json
+from typing import Any, Callable, List, cast
 
 from langchain_mcp_adapters.client import (  # type: ignore[import-untyped]
     MultiServerMCPClient,
@@ -12,29 +13,28 @@ logger = logging.getLogger(__name__)
 # Global MCP client and tools cache
 _mcp_client: MultiServerMCPClient | None = None
 _mcp_tools_cache: List[Callable[..., Any]] = []
-
-# MCP Server configurations
-MCP_SERVERS = {
-    "deepwiki": {
-        "url": "https://mcp.deepwiki.com/mcp",
-        "transport": "streamable_http",
-    },
-}
+_mcp_server_configs: str | None = None
 
 
 async def get_mcp_client(
-    server_configs: Dict[str, Any] | None = None,
+    server_configs: str,
 ) -> MultiServerMCPClient | None:
     """Get or initialize the global MCP client with given server configurations."""
     global _mcp_client
+    global _mcp_server_configs
 
-    if _mcp_client is None:
-        configs = server_configs or MCP_SERVERS
+    if _mcp_client is None or _mcp_server_configs != server_configs:
+        try:
+            config = json.loads(server_configs)
+        except Exception as e:
+            logger.error("Invalid JSON for server_configs: %s", e)
+            return None
+        
         try:
             _mcp_client = MultiServerMCPClient(
-                configs
+                config
             )  # pyright: ignore[reportArgumentType]
-            logger.info(f"Initialized MCP client with servers: {list(configs.keys())}")
+            _mcp_server_configs = server_configs
         except Exception as e:
             logger.error("Failed to initialize MCP client: %s", e)
             return None
@@ -42,7 +42,7 @@ async def get_mcp_client(
 
 
 async def get_mcp_tools(
-    server_configs: Dict[str, Any] | None = None,
+    server_configs: str,
 ) -> List[Callable[..., Any]]:
     """Get MCP tools for a specific server, initializing client if needed."""
     global _mcp_tools_cache

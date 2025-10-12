@@ -7,14 +7,13 @@ consider implementing more robust and specialized tools tailored to your needs.
 """
 
 import logging
-import json
-from typing import Any, Callable, List, Optional, cast
+from typing import Any, Callable, List, cast
 
 from langchain_tavily import TavilySearch
 from langgraph.runtime import get_runtime
 
+from common.mcp_adapter import get_mcp_tools
 from planner_agent.context import Context
-from planner_agent.mcp import get_mcp_tools
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +38,8 @@ async def get_tools() -> List[Callable[..., Any]]:
     if runtime.context.enable_web_search:
         tools.append(web_search)
 
-    mcp_server_configs = json.loads(runtime.context.mcp_server_configs)
-    mcp_tools = await get_mcp_tools(server_configs=mcp_server_configs)
+    mcp_server_configs = runtime.context.mcp_server_configs
+    mcp_tools = await get_mcp_tools(mcp_server_configs)
     tools.extend(mcp_tools)
 
     logger.info(f"Loaded {len(tools)} tools")

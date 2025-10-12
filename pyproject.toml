@@ -28,10 +28,11 @@ requires = ["setuptools>=73.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["langgraph.templates.planner_agent", "planner_agent"]
+packages = ["langgraph.templates.planner_agent", "planner_agent", "common"]
 [tool.setuptools.package-dir]
 "langgraph.templates.planner_agent" = "src/planner_agent"
 "planner_agent" = "src/planner_agent"
+"common" = "src/common"
 
 
 [tool.setuptools.package-data]

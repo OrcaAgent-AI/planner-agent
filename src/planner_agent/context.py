@@ -8,7 +8,7 @@ from dataclasses import dataclass, field, fields
 from typing import Annotated
 
 from . import prompts
-from planner_agent.mcp import MCP_SERVERS
+from planner_agent.mcp_server_configs import MCP_SERVERS
 
 
 @dataclass(kw_only=True)
