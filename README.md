@@ -1,93 +1,291 @@
-# LangGraph ReAct Agent Template
+# OrcaAgent React Template
+
+[🇨🇳 中文](README_CN.md) | 🇺🇸 English
 
 [![CI](https://github.com/langchain-ai/react-agent/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/langchain-ai/react-agent/actions/workflows/unit-tests.yml)
 [![Integration Tests](https://github.com/langchain-ai/react-agent/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/langchain-ai/react-agent/actions/workflows/integration-tests.yml)
 [![Open in - LangGraph Studio](https://img.shields.io/badge/Open_in-LangGraph_Studio-00324d.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4NS4zMzMiIGhlaWdodD0iODUuMzMzIiB2ZXJzaW9uPSIxLjAiIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTEzIDcuOGMtNi4zIDMuMS03LjEgNi4zLTYuOCAyNS43LjQgMjQuNi4zIDI0LjUgMjUuOSAyNC41QzU3LjUgNTggNTggNTcuNSA1OCAzMi4zIDU4IDcuMyA1Ni43IDYgMzIgNmMtMTIuOCAwLTE2LjEuMy0xOSAxLjhtMzcuNiAxNi42YzIuOCAyLjggMy40IDQuMiAzLjQgNy42cy0uNiA0LjgtMy40IDcuNkw0Ny4yIDQzSDE2LjhsLTMuNC0zLjRjLTQuOC00LjgtNC44LTEwLjQgMC0xNS4ybDMuNC0zLjRoMzAuNHoiLz48cGF0aCBkPSJNMTguOSAyNS42Yy0xLjEgMS4zLTEgMS43LjQgMi41LjkuNiAxLjcgMS44IDEuNyAyLjcgMCAxIC43IDIuOCAxLjYgNC4xIDEuNCAxLjkgMS40IDIuNS4zIDMuMi0xIC42LS42LjkgMS40LjkgMS41IDAgMi43LS41IDIuNy0xIDAtLjYgMS4xLS44IDIuNi0uNGwyLjYuNy0xLjgtMi45Yy01LjktOS4zLTkuNC0xMi4zLTExLjUtOS44TTM5IDI2YzAgMS4xLS45IDIuNS0yIDMuMi0yLjQgMS41LTIuNiAzLjQtLjUgNC4yLjguMyAyIDEuNyAyLjUgMy4xLjYgMS41IDEuNCAyLjMgMiAyIDEuNS0uOSAxLjItMy41LS40LTMuNS0yLjEgMC0yLjgtMi44LS44LTMuMyAxLjYtLjQgMS42LS41IDAtLjYtMS4xLS4xLTEuNS0uNi0xLjItMS42LjctMS43IDMuMy0yLjEgMy41LS41LjEuNS4yIDEuNi4zIDIuMiAwIC43LjkgMS40IDEuOSAxLjYgMi4xLjQgMi4zLTIuMy4yLTMuMi0uOC0uMy0yLTEuNy0yLjUtMy4xLTEuMS0zLTMtMy4zLTMtLjUiLz48L3N2Zz4=)](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/react-agent)
 
-This template showcases a [ReAct agent](https://arxiv.org/abs/2210.03629) implemented using [LangGraph](https://github.com/langchain-ai/langgraph), designed for [LangGraph Studio](https://github.com/langchain-ai/langgraph-studio). ReAct agents are uncomplicated, prototypical agents that can be flexibly extended to many tools.
+## 📖 Project Overview
 
-![Graph view in LangGraph studio UI](./static/studio_ui.png)
+**OrcaAgent** is an Agent development framework based on LangGraph, deeply integrating the rich ecosystem resources of LangChain/LangGraph. Built on industry best practices with necessary encapsulation, it provides rich Agent scenario templates and scaffolding tools.
 
-The core logic, defined in `src/react_agent/graph.py`, demonstrates a flexible ReAct agent that iteratively reasons about user queries and executes actions, showcasing the power of this approach for complex problem-solving tasks.
+### 🌟 Core Features
 
-## What it does
+- **Ready to Use**: Pre-built standardized components for quick business scenario deployment
+- **Ecosystem Compatibility**: Seamless reuse of LangChain toolchain and LangGraph workflow engine
 
-The ReAct agent:
+## 🎯 Planner Template Features
 
-1. Takes a user **query** as input
-2. Reasons about the query and decides on an action
-3. Executes the chosen action using available tools
-4. Observes the result of the action
-5. Repeats steps 2-4 until it can provide a final answer
+This project is a Planner pattern-based Agent template provided by OrcaAgent, primarily based on the implementation pattern from [LangGraph Plan-and-Execute Tutorial](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb).
 
-By default, it's set up with a basic set of tools, but can be easily extended with custom tools to suit various use cases.
+### ✨ Key Advantages
 
-## Getting Started
+1. **Plan First, Execute Later**
+   - When facing complex problems, the LLM first creates a detailed execution plan
+   - Generates feasible todolist, solving problems step by step
+   - Avoids blind execution, improving problem-solving success rate
 
-Assuming you have already [installed LangGraph Studio](https://github.com/langchain-ai/langgraph-studio?tab=readme-ov-file#download), to set up:
+2. **Suitable for Complex Task Scenarios**
+   - Compared to React mode's "step-by-step" approach, Planner mode is more systematic
+   - React mode is more like LLM's conditioned reflex with limited accuracy optimization
+   - Planner mode handles multi-step, complex logic tasks better through pre-planning
 
-1. Create a `.env` file.
+3. **Intelligent Task Decomposition**
+   - Breaks down complex problems into multiple executable subtasks
+   - Each subtask has clear objectives and execution steps
+   - Supports dependency management between tasks
 
+4. **Model Compatibility**
+   - Compatible with OpenAI protocol LLMs
+   - Supports user-deployed models (prefixed with `compatible_openai/`)
+   - Flexible model configuration options
+
+## 🚀 Quick Start
+
+### Environment Setup
+
+1. **Create environment configuration file**
 ```bash
 cp .env.example .env
 ```
 
-2. Define required API keys in your `.env` file.
+2. **Configure API Keys**
 
-The primary [search tool](./src/react_agent/tools.py) [^1] used is [Tavily](https://tavily.com/). Create an API key [here](https://app.tavily.com/sign-in).
+Define necessary API keys in the `.env` file. By default, uses [Tavily](https://tavily.com/) search tool, which requires creating an API key [here](https://app.tavily.com/sign-in).
 
-### Setup Model
+### Model Configuration
 
-The defaults values for `model` are shown below:
-
+Default model configuration:
 ```yaml
 model: anthropic/claude-3-5-sonnet-20240620
 ```
 
-Follow the instructions below to get set up, or pick one of the additional options.
-
-#### Anthropic
-
-To use Anthropic's chat models:
-
-1. Sign up for an [Anthropic API key](https://console.anthropic.com/) if you haven't already.
-2. Once you have your API key, add it to your `.env` file:
-
+#### Anthropic Configuration
+1. Get [Anthropic API key](https://console.anthropic.com/)
+2. Add to `.env` file:
 ```
 ANTHROPIC_API_KEY=your-api-key
 ```
-#### OpenAI
 
-To use OpenAI's chat models:
-
-1. Sign up for an [OpenAI API key](https://platform.openai.com/signup).
-2. Once you have your API key, add it to your `.env` file:
+#### OpenAI Configuration
+1. Get [OpenAI API key](https://platform.openai.com/signup)
+2. Add to `.env` file:
 ```
 OPENAI_API_KEY=your-api-key
 ```
 
-3. Customize whatever you'd like in the code.
-4. Open the folder LangGraph Studio!
+#### OpenAI Compatible Protocol Configuration
+1. Edit `.env` file:
+```
+OPENAI_API_KEY=your-api-key
+OPENAI_BASE_URL=your-base-url
+OPENAI_MODEL_NAME=your-model-name
+```
 
-## How to customize
+## 🛠️ Usage
 
-1. **Add new tools**: Extend the agent's capabilities by adding new tools in [tools.py](./src/react_agent/tools.py). These can be any Python functions that perform specific tasks.
-2. **Select a different model**: We default to Anthropic's Claude 3 Sonnet. You can select a compatible chat model using `provider/model-name` via runtime context. Example: `openai/gpt-4-turbo-preview`.
-3. **Customize the prompt**: We provide a default system prompt in [prompts.py](./src/react_agent/prompts.py). You can easily update this via context in the studio.
+### CLI Quick Start
 
-You can also quickly extend this template by:
+#### 1. Download CLI
+```bash
+pip install orcaagent-cli
+```
 
-- Modifying the agent's reasoning process in [graph.py](./src/react_agent/graph.py).
-- Adjusting the ReAct loop or adding additional steps to the agent's decision-making process.
+#### 2. Use CLI to Download Existing Templates
 
-## Development
+Download template [TEMPLATE] to path [PATH]:
+```bash
+orcaagent new [PATH] [TEMPLATE]
+```
+You can also use `orcaagent new` command for interactive template selection
 
-While iterating on your graph, you can edit past state and rerun your app from past states to debug specific nodes. Local changes will be automatically applied via hot reload. Try adding an interrupt before the agent calls tools, updating the default system message in `src/react_agent/context.py` to take on a persona, or adding additional nodes and edges!
+#### 3. Configure .env
+- Create `.env` in the downloaded template directory
+- Get required API_KEYs and fill in `.env`, for example:
+  - TAVILY_API_KEY
+  - LANGSMITH_API_KEY
+  - LLM API KEY
 
-Follow up requests will be appended to the same thread. You can create an entirely new thread, clearing previous history, using the `+` button in the top right.
+#### 4. Debug and Development
+Enter the downloaded template directory:
+```bash
+cd [PATH]
+```
+Install necessary dependencies:
+```bash
+pip install -e .
+```
+Start debugging:
+```bash
+orcaagent dev
+```
 
-You can find the latest (under construction) docs on [LangGraph](https://github.com/langchain-ai/langgraph) here, including examples and other references. Using those guides can help you pick the right patterns to adapt here for your use case.
+### CLI Features
 
-LangGraph Studio also integrates with [LangSmith](https://smith.langchain.com/) for more in-depth tracing and collaboration with teammates.
+#### Browse CLI Functions
+```bash
+orcaagent --help
+```
 
-[^1]: https://python.langchain.com/docs/concepts/#tools
+#### Browse Existing Templates
+```bash
+orcaagent template
+```
+
+#### Create Project Using Existing Templates
+1. `orcaagent new [PATH] [TEMPLATE]`
+2. You can also use `orcaagent new` command for interactive template selection
+
+#### Debug and Development
+Start lightweight local server for debugging:
+```bash
+orcaagent dev
+```
+
+#### Start Complete OrcaAgent Service with Local Docker
+*Requires Docker installed and running locally*
+```bash
+orcaagent up
+```
+
+#### Generate Dockerfile
+```bash
+orcaagent dockerfile [SAVE_PATH]
+```
+Example: `orcaagent dockerfile Dockerfile`
+
+#### Generate Dockerfile and docker-compose.yml
+```bash
+orcaagent dockerfile --config [CONFIG] --add-docker-compose ./Dockerfile
+```
+Example: `orcaagent dockerfile --config orcaagent.json --add-docker-compose ./Dockerfile`
+
+#### Package and Build Image
+```bash
+orcaagent build --tag [TAG TEXT]
+```
+Example: `orcaagent build --tag my-agent`
+
+## 🔧 Custom Configuration
+
+### 1. Add MCP Server
+
+Add or remove MCP Servers in `src/react_agent/mcp_server_configs.py`:
+
+```python
+MCP_SERVERS = {
+        "math": {
+            "command": "python",
+            # Make sure to update to the full absolute path to your math_server.py file
+            "args": ["/path/to/math_server.py"],
+            "transport": "stdio",
+        },
+        "weather": {
+            # Make sure you start your weather server on port 8000
+            "url": "http://localhost:8000/mcp",
+            "transport": "streamable_http",
+        }
+    }
+```
+
+### 2. Add New Tools
+
+Extend Agent functionality in `src/react_agent/tools.py`:
+
+```python
+from langchain.tools import tool
+
+@tool
+def custom_tool(query: str) -> str:
+    """Custom tool description"""
+    # Tool implementation logic
+    return result
+```
+
+### 3. Choose Different Models
+
+Select compatible chat models through runtime context:
+```python
+# Example: Use OpenAI GPT-4
+model = "openai/gpt-4-turbo-preview"
+
+# Example: Use self-deployed model compatible with OpenAI protocol
+model = "compatible_openai/DeepSeek-V3-0324"
+```
+
+### 4. Custom Prompts
+
+Update system prompts in `src/react_agent/prompts.py`:
+
+```python
+SYSTEM_PROMPT = """
+You are a professional AI assistant specialized in handling...
+"""
+```
+
+### 5. Modify Reasoning Flow
+
+Adjust Agent's reasoning process in `src/react_agent/graph.py`:
+- Modify ReAct loop
+- Add additional decision steps
+- Customize nodes and edges
+
+## 📁 Project Structure
+
+```
+react-agent/
+├── src/
+│   ├── common/           # Common utilities and configurations
+│   └── react_agent/      # React Agent core code
+│       ├── graph.py      # Graph structure definition
+│       ├── tools.py      # Tool definitions
+│       ├── prompts.py    # Prompt templates
+│       └── main.py       # Main entry point
+├── static/               # Static resources
+├── tests/                # Test files
+│   ├── unit_tests/       # Unit tests
+│   └── integration_tests/ # Integration tests
+├── .env.example          # Environment configuration example
+└── README.md
+```
+
+## 🧪 Development and Debugging
+
+### Local Development
+
+When iterating on graph structure, you can:
+- Edit past states and rerun the application from past states
+- Use hot reload to automatically apply local changes
+- Add breakpoints before Agent calls tools
+- Update default system messages to adopt specific roles
+- Add additional nodes and edges
+
+### Create New Thread
+
+Use the `+` button in the top right corner to create a brand new thread, clearing previous history.
+
+## 📚 Related Resources
+
+- [LangGraph Documentation](https://github.com/langchain-ai/langgraph)
+
+## 🤝 Contributing
+
+We welcome community contributions! Please follow these steps:
+
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support and Feedback
+
+For questions or suggestions, please:
+- Submit an [Issue](https://github.com/OrcaAgent-AI/react-agent/issues)
+- Send email to: jubaoliang@gmail.com
+- Join our community discussion group
