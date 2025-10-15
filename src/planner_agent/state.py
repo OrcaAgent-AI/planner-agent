@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import operator
 from dataclasses import dataclass, field
-from typing import Any, List, Sequence, Tuple
+from typing import Sequence, Tuple
 
 from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
@@ -53,21 +53,21 @@ class State(InputState):
     It serves as the primary objective for the agent to accomplish.
     """
 
-    initial_plan: List[str] = field(default_factory=list)
+    initial_plan: list[str] = field(default_factory=list)
     """
     List of strings representing the initial planning steps.
     
     This contains the original plan created at the beginning of the execution.
     """
 
-    plan: List[str] = field(default_factory=list)
+    plan: list[str] = field(default_factory=list)
     """
     List of strings representing the current planning steps.
     
     This contains the current plan which may be updated during execution.
     """
 
-    past_steps: Annotated[List[Tuple[str, Any]], operator.add] = field(default_factory=list)
+    past_steps: Annotated[list[Tuple[str, object]], operator.add] = field(default_factory=list)
     """
     List of tuples representing completed steps.
     
@@ -87,5 +87,5 @@ class State(InputState):
     # Additional attributes can be added here as needed.
     # Common examples include:
     # retrieved_documents: List[Document] = field(default_factory=list)
-    # extracted_entities: Dict[str, Any] = field(default_factory=dict)
-    # api_connections: Dict[str, Any] = field(default_factory=dict)
+    # extracted_entities: dict[str, Any] = field(default_factory=dict)
+    # api_connections: dict[str, Any] = field(default_factory=dict)

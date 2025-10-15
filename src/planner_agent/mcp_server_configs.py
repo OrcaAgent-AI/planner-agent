@@ -1,7 +1,6 @@
 """MCP server configurations."""
-from typing import Any, Dict
 
-MCP_SERVERS: Dict[str, Any] = {
+MCP_SERVERS = {
     "deepwiki": {
         "url": "https://mcp.deepwiki.com/mcp",
         "transport": "streamable_http",

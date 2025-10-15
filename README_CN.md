@@ -1,4 +1,4 @@
-# OrcaAgent React 模板
+# OrcaAgent Planner 模板
 
 🇨🇳 中文 | [🇺🇸 English](README.md)
 

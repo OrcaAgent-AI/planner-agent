@@ -1,4 +1,4 @@
-# OrcaAgent Planner Template
+# OrcaAgent React Template
 
 [🇨🇳 中文](README_CN.md) | 🇺🇸 English
 
@@ -15,28 +15,23 @@
 - **Ready to Use**: Pre-built standardized components for quick business scenario deployment
 - **Ecosystem Compatibility**: Seamless reuse of LangChain toolchain and LangGraph workflow engine
 
-## 🎯 Planner Template Features
+## 🎯 React Template Features
 
-This project is a Planner pattern-based Agent template provided by OrcaAgent, primarily based on the implementation pattern from [LangGraph Plan-and-Execute Tutorial](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb).
+This project is a React pattern-based Agent template provided by OrcaAgent, specifically optimized for tool calling and Q&A scenarios:
 
 ### ✨ Key Advantages
 
-1. **Plan First, Execute Later**
-   - When facing complex problems, the LLM first creates a detailed execution plan
-   - Generates feasible todolist, solving problems step by step
-   - Avoids blind execution, improving problem-solving success rate
+1. **Intelligent Tool Filtering**
+   - Tool filtering before React execution
+   - Suitable for Agents with numerous tools
+   - Effectively reduces token usage and improves answer accuracy
 
-2. **Suitable for Complex Task Scenarios**
-   - Compared to React mode's "step-by-step" approach, Planner mode is more systematic
-   - React mode is more like LLM's conditioned reflex with limited accuracy optimization
-   - Planner mode handles multi-step, complex logic tasks better through pre-planning
+2. **Tool-Only Mode**
+   - Completely relies on tool calls to answer questions
+   - Limits LLM response scope to avoid free-form answers
+   - Ensures answer quality - doesn't answer unknown questions
 
-3. **Intelligent Task Decomposition**
-   - Breaks down complex problems into multiple executable subtasks
-   - Each subtask has clear objectives and execution steps
-   - Supports dependency management between tasks
-
-4. **Model Compatibility**
+3. **Model Compatibility**
    - Compatible with OpenAI protocol LLMs
    - Supports user-deployed models (prefixed with `compatible_openai/`)
    - Flexible model configuration options

@@ -1,8 +1,8 @@
 """MCP Client setup and management for LangGraph ReAct Agent."""
 
-import logging
 import json
-from typing import Any, Callable, List, cast
+import logging
+from typing import Callable, cast
 
 from langchain_mcp_adapters.client import (  # type: ignore[import-untyped]
     MultiServerMCPClient,
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Global MCP client and tools cache
 _mcp_client: MultiServerMCPClient | None = None
-_mcp_tools_cache: List[Callable[..., Any]] = []
+_mcp_tools_cache: list[Callable[..., object]] = []
 _mcp_server_configs: str | None = None
 
 
@@ -29,11 +29,9 @@ async def get_mcp_client(
         except Exception as e:
             logger.error("Invalid JSON for server_configs: %s", e)
             return None
-        
+
         try:
-            _mcp_client = MultiServerMCPClient(
-                config
-            )  # pyright: ignore[reportArgumentType]
+            _mcp_client = MultiServerMCPClient(config)
             _mcp_server_configs = server_configs
         except Exception as e:
             logger.error("Failed to initialize MCP client: %s", e)
@@ -43,7 +41,7 @@ async def get_mcp_client(
 
 async def get_mcp_tools(
     server_configs: str,
-) -> List[Callable[..., Any]]:
+) -> list[Callable[..., object]]:
     """Get MCP tools for a specific server, initializing client if needed."""
     global _mcp_tools_cache
 
@@ -58,13 +56,13 @@ async def get_mcp_tools(
 
         # Get all tools and filter by server (if tools have server metadata)
         all_tools = await client.get_tools()
-        tools = cast(List[Callable[..., Any]], all_tools)
+        tools = cast(list[Callable[..., object]], all_tools)
 
         _mcp_tools_cache = tools
         logger.info(f"Loaded {len(tools)} tools from MCP server.")
         for idx, tool in enumerate(tools):
             logger.info(
-                f"Tool {idx+1}: {getattr(tool, 'name', 'Unknown')}, {getattr(tool, 'description', 'No description')}"
+                f"Tool {idx + 1}: {getattr(tool, 'name', 'Unknown')}, {getattr(tool, 'description', 'No description')}"
             )
         return tools
     except Exception as e:

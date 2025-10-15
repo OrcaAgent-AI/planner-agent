@@ -7,7 +7,7 @@ consider implementing more robust and specialized tools tailored to your needs.
 """
 
 import logging
-from typing import Any, Callable, List, cast
+from typing import Callable, cast
 
 from langchain_tavily import TavilySearch
 from langgraph.runtime import get_runtime
@@ -18,7 +18,7 @@ from planner_agent.context import Context
 logger = logging.getLogger(__name__)
 
 
-async def web_search(query: str) -> dict[str, Any] | None:
+async def web_search(query: str) -> dict[str, object] | None:
     """Search for general web results.
 
     This function performs a search using the Tavily search engine, which is designed
@@ -27,12 +27,12 @@ async def web_search(query: str) -> dict[str, Any] | None:
     """
     runtime = get_runtime(Context)
     wrapped = TavilySearch(max_results=runtime.context.max_search_results)
-    return cast(dict[str, Any], await wrapped.ainvoke({"query": query}))
+    return cast(dict[str, object], await wrapped.ainvoke({"query": query}))
 
 
-async def get_tools() -> List[Callable[..., Any]]:
+async def get_tools() -> list[Callable[..., object]]:
     """Get all available tools based on configuration."""
-    tools = []
+    tools: list[Callable[..., object]] = []
     runtime = get_runtime(Context)
 
     if runtime.context.enable_web_search:
