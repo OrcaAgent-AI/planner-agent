@@ -78,4 +78,41 @@ class Context:
                 continue
 
             if getattr(self, f.name) == f.default:
-                setattr(self, f.name, os.environ.get(f.name.upper(), f.default))
+                env_var_name = f.name.upper()
+                env_value = os.environ.get(env_var_name)
+                
+                if env_value is not None:
+                    # Convert environment variable value based on field type
+                    try:
+                        converted_value = self._convert_env_value(env_value, f.type, f.default)
+                        setattr(self, f.name, converted_value)
+                    except Exception:
+                        setattr(self, f.name, f.default)
+
+    def _convert_env_value(self, env_value: str, field_type: type, default_value: any) -> any:
+        """Convert environment variable value to appropriate type."""
+        if field_type is bool:
+            # Handle boolean type: support "true", "false", "1", "0", etc.
+            env_value_lower = env_value.lower()
+            if env_value_lower in ("true", "1", "yes", "on"):
+                return True
+            if env_value_lower in ("false", "0", "no", "off"):
+                return False
+            return default_value
+        
+        if field_type is int:
+            # Handle integer type
+            try:
+                return int(env_value)
+            except ValueError:
+                return default_value
+        
+        if field_type is float:
+            # Handle float type
+            try:
+                return float(env_value)
+            except ValueError:
+                return default_value
+        
+        # String and other types use directly
+        return env_value
