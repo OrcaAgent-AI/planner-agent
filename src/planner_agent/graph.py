@@ -20,8 +20,11 @@ and parseable responses from the LLM.
 
 from datetime import UTC, datetime
 
+from typing import Any
+
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
+
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import create_react_agent
 from langgraph.runtime import Runtime
