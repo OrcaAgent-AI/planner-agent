@@ -1,0 +1,79 @@
+volumes:
+    postgres-data:
+        driver: local
+
+networks:
+    orcakit:
+        driver: bridge
+        name: orcakit
+        external: true
+
+services:
+
+    redis:
+        image: redis:6
+        networks:
+            - orcakit
+        healthcheck:
+            test: redis-cli ping
+            interval: 5s
+            timeout: 1s
+            retries: 5
+
+    postgres:
+        image: pgvector/pgvector:pg16
+        networks:
+            - orcakit
+        ports:
+            - "25432:5432"
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        command:
+            - postgres
+            - -c
+            - shared_preload_libraries=vector
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        healthcheck:
+            test: pg_isready -U postgres
+            start_period: 10s
+            timeout: 1s
+            retries: 5
+            interval: 60s
+            start_interval: 1s
+
+    planner-agent:
+        # image: csighub.tencentyun.com/orcakit/supervisor:1.0.0
+        networks:
+            - orcakit
+        ports:
+            - "8000:8000"
+        depends_on:
+            redis:
+                condition: service_healthy
+            postgres:
+                condition: service_healthy
+        environment:
+            TAIJI_APP_KEY: SHIFYU3HFU9BGRTPKABNROAG1OBMOEYG
+            ENABLE_AUTH: true
+            REDIS_URI: redis://redis:6379
+            POSTGRES_URI: postgresql://postgres:postgres@postgres:5432/planner-agent?sslmode=disable
+            ADMIN_USERS: jubaoliang
+            LANGSMITH_PROJECT: planner-agent
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+            interval: 60s
+            start_interval: 1s
+            start_period: 10s
+            timeout: 3s
+            retries: 3
+        env_file:
+            - .env
+        # volumes:
+        #     - /var/run/docker.sock:/var/run/docker.sock
+        #     - /usr/bin/docker:/usr/bin/docker:ro
+        build: 
+            context: ./
+            dockerfile: Dockerfile

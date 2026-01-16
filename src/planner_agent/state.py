@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import operator
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Sequence, Tuple
 
 from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
@@ -67,7 +67,9 @@ class State(InputState):
     This contains the current plan which may be updated during execution.
     """
 
-    past_steps: Annotated[list[Tuple[str, object]], operator.add] = field(default_factory=list)
+    past_steps: Annotated[list[tuple[str, object]], operator.add] = field(
+        default_factory=list
+    )
     """
     List of tuples representing completed steps.
     

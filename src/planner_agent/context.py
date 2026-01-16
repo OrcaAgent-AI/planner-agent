@@ -3,17 +3,55 @@
 from __future__ import annotations
 
 import json
-import os
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 from typing import Annotated
+
+from langgraph.runtime import Runtime
+from orcakit_sdk.context import EnvAwareConfig
 
 from planner_agent.mcp_server_configs import MCP_SERVERS
 
 from . import prompts
 
 
+def get_context(runtime: Runtime[Context] | None) -> Context:
+    """Get context from runtime, returning default Context if runtime or context is None.
+
+    Handles the case where runtime.context is a dict (e.g., when passed via with_config)
+    by converting it to a Context object.
+
+    Args:
+        runtime: The runtime object containing context, or None.
+
+    Returns:
+        Context: The context from runtime, or a new default Context instance.
+    """
+    if runtime is None or runtime.context is None:
+        return Context()
+
+    ctx = runtime.context
+    # Handle case where context is a dict (from with_config configurable)
+    if isinstance(ctx, dict):
+        # Filter only known Context fields to avoid unexpected kwargs
+        context_fields = {
+            "system_prompt",
+            "plan_model",
+            "replan_model",
+            "execute_model",
+            "max_search_results",
+            "enable_web_search",
+            "mcp_server_configs",
+        }
+        filtered = {
+            k: v for k, v in ctx.items() if k in context_fields and v is not None
+        }
+        return Context(**filtered)
+
+    return ctx
+
+
 @dataclass(kw_only=True)
-class Context:
+class Context(EnvAwareConfig):
     """The context for the agent."""
 
     system_prompt: str = field(
@@ -70,49 +108,3 @@ class Context:
             "This defines which MCP servers are available and their connection settings."
         },
     )
-
-    def __post_init__(self) -> None:
-        """Fetch env vars for attributes that were not passed as args."""
-        for f in fields(self):
-            if not f.init:
-                continue
-
-            if getattr(self, f.name) == f.default:
-                env_var_name = f.name.upper()
-                env_value = os.environ.get(env_var_name)
-                
-                if env_value is not None:
-                    # Convert environment variable value based on field type
-                    try:
-                        converted_value = self._convert_env_value(env_value, f.type, f.default)
-                        setattr(self, f.name, converted_value)
-                    except Exception:
-                        setattr(self, f.name, f.default)
-
-    def _convert_env_value(self, env_value: str, field_type: type, default_value: any) -> any:
-        """Convert environment variable value to appropriate type."""
-        if field_type is bool:
-            # Handle boolean type: support "true", "false", "1", "0", etc.
-            env_value_lower = env_value.lower()
-            if env_value_lower in ("true", "1", "yes", "on"):
-                return True
-            if env_value_lower in ("false", "0", "no", "off"):
-                return False
-            return default_value
-        
-        if field_type is int:
-            # Handle integer type
-            try:
-                return int(env_value)
-            except ValueError:
-                return default_value
-        
-        if field_type is float:
-            # Handle float type
-            try:
-                return float(env_value)
-            except ValueError:
-                return default_value
-        
-        # String and other types use directly
-        return env_value

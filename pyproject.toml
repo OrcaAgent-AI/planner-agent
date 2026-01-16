@@ -9,13 +9,8 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.11,<4.0"
 dependencies = [
-    "langgraph>=0.6.6,<2.0.0",
-    "langchain-openai>=0.1.22",
-    "langchain-anthropic>=0.1.23",
-    "langchain>=0.2.14",
-    "python-dotenv>=1.0.1",
     "langchain-tavily>=0.1",
-    "langchain-mcp-adapters>=0.1.9",
+    "orcakit-sdk>=0.1.13",
 ]
 
 
@@ -27,11 +22,10 @@ requires = ["setuptools>=73.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["langgraph.templates.planner_agent", "planner_agent", "common"]
+packages = ["langgraph.templates.planner_agent", "planner_agent"]
 [tool.setuptools.package-dir]
 "langgraph.templates.planner_agent" = "src/planner_agent"
 "planner_agent" = "src/planner_agent"
-"common" = "src/common"
 
 
 [tool.setuptools.package-data]

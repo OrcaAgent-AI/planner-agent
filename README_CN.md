@@ -1,4 +1,4 @@
-# OrcaAgent Planner 模板
+# OrcaKit Planner 模板
 
 🇨🇳 中文 | [🇺🇸 English](README.md)
 
@@ -8,7 +8,7 @@
 
 ## 📖 项目简介
 
-**OrcaAgent** 是基于 LangGraph 二次开发的 Agent 开发框架，它深度融合 LangChain/LangGraph 的丰富生态资源，并且基于行业最佳实践做了一些必要的封装，提供了丰富的 Agent 场景化模板和脚手架工具。
+**OrcaKit** 是基于 LangGraph 二次开发的 Agent 开发框架，它深度融合 LangChain/LangGraph 的丰富生态资源，并且基于行业最佳实践做了一些必要的封装，提供了丰富的 Agent 场景化模板和脚手架工具。
 
 ### 🌟 核心特点
 
@@ -17,7 +17,7 @@
 
 ## 🎯 Planner 模板特性
 
-该项目是 OrcaAgent 提供的基于 Planner 模式的 Agent 模板，主要基于 [LangGraph Plan-and-Execute 教程](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb) 的实现模式。
+该项目是 OrcaKit 提供的基于 Planner 模式的 Agent 模板，主要基于 [LangGraph Plan-and-Execute 教程](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb) 的实现模式。
 
 ### ✨ 主要优势
 
@@ -90,16 +90,16 @@ OPENAI_MODEL_NAME=your-model-name
 
 #### 1. 下载 CLI
 ```bash
-pip install orcaagent-cli
+pip install orcakit-cli
 ```
 
 #### 2. 使用 CLI 下载现有模板
 
 下载模板 [TEMPLATE] 到路径 [PATH]：
 ```bash
-orcaagent new [PATH] [TEMPLATE]
+orcakit new [PATH] [TEMPLATE]
 ```
-也可以直接使用 `orcaagent new` 命令互动下载选择模板
+也可以直接使用 `orcakit new` 命令互动下载选择模板
 
 #### 3. 配置 .env
 - 在刚刚下载的模板目录下创建 `.env`
@@ -119,61 +119,61 @@ pip install -e .
 ```
 启动调试：
 ```bash
-orcaagent dev
+orcakit dev
 ```
 
 ### CLI 功能介绍
 
 #### 浏览 CLI 功能
 ```bash
-orcaagent --help
+orcakit --help
 ```
 
 #### 浏览现有模板
 ```bash
-orcaagent template
+orcakit template
 ```
 
 #### 利用现有模板创建项目
-1. `orcaagent new [PATH] [TEMPLATE]`
-2. 也可以直接使用 `orcaagent new` 命令互动下载选择模板
+1. `orcakit new [PATH] [TEMPLATE]`
+2. 也可以直接使用 `orcakit new` 命令互动下载选择模板
 
 #### 调试开发
 在本地启动轻量级服务器调试开发：
 ```bash
-orcaagent dev
+orcakit dev
 ```
 
-#### 利用本地 Docker 启动完整 OrcaAgent 服务
+#### 利用本地 Docker 启动完整 OrcaKit 服务
 *需要先在本地安装并运行 Docker*
 ```bash
-orcaagent up
+orcakit up
 ```
 
 #### 生成 Dockerfile
 ```bash
-orcaagent dockerfile [SAVE_PATH]
+orcakit dockerfile [SAVE_PATH]
 ```
-例如：`orcaagent dockerfile Dockerfile`
+例如：`orcakit dockerfile Dockerfile`
 
 #### 生成 Dockerfile 和 docker-compose.yml
 ```bash
-orcaagent dockerfile --config [CONFIG] --add-docker-compose ./Dockerfile
+orcakit dockerfile --config [CONFIG] --add-docker-compose ./Dockerfile
 ```
-例如：`orcaagent dockerfile --config orcaagent.json --add-docker-compose ./Dockerfile`
+例如：`orcakit dockerfile --config orcakit.json --add-docker-compose ./Dockerfile`
 
 #### 打包构建镜像
 ```bash
-orcaagent build --tag [TAG TEXT]
+orcakit build --tag [TAG TEXT]
 ```
-例如：`orcaagent build --tag my-agent`
+例如：`orcakit build --tag my-agent`
 
 
 ## 🔧 自定义配置
 
 ### 1. 添加 MCP Server
 
-在 `src/react_agent/mcp_server_configs.py` 中删除或添加更多的 MCP Server：
+在 `src/planner_agent/mcp_server_configs.py` 中删除或添加更多的 MCP Server：
 
 ```python
 MCP_SERVERS = {
@@ -193,7 +193,7 @@ MCP_SERVERS = {
 
 ### 2. 添加新工具
 
-在 `src/react_agent/tools.py` 中扩展 Agent 功能：
+在 `src/planner_agent/tools.py` 中扩展 Agent 功能：
 
 ```python
 from langchain.tools import tool
@@ -218,7 +218,7 @@ model = "compatible_openai/DeepSeek-V3-0324"
 
 ### 4. 自定义提示词
 
-在 `src/react_agent/prompts.py` 中更新系统提示词：
+在 `src/planner_agent/prompts.py` 中更新系统提示词：
 
 ```python
 SYSTEM_PROMPT = """
@@ -228,7 +228,7 @@ SYSTEM_PROMPT = """
 
 ### 5. 修改推理流程
 
-在 `src/react_agent/graph.py` 中调整 Agent 的推理过程：
+在 `src/planner_agent/graph.py` 中调整 Agent 的推理过程：
 - 修改 ReAct 循环
 - 添加额外的决策步骤
 - 自定义节点和边
@@ -239,7 +239,7 @@ SYSTEM_PROMPT = """
 react-agent/
 ├── src/
 │   ├── common/           # 通用工具和配置
-│   └── react_agent/      # React Agent 核心代码
+│   └── planner_agent/      # React Agent 核心代码
 │       ├── graph.py      # 图结构定义
 │       ├── tools.py      # 工具定义
 │       ├── prompts.py    # 提示词模板
@@ -288,6 +288,6 @@ react-agent/
 ## 📞 支持与反馈
 
 如有问题或建议，请：
-- 提交 [Issue](https://github.com/OrcaAgent-AI/react-agent/issues)
+- 提交 [Issue](https://github.com/OrcaKit-AI/react-agent/issues)
 - 发送邮件至：jubaoliang@gmail.com
 - 加入我们的社区讨论群

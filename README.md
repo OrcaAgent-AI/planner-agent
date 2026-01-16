@@ -1,4 +1,4 @@
-# OrcaAgent Planner Template
+# OrcaKit Planner Template
 
 [🇨🇳 中文](README_CN.md) | 🇺🇸 English
 
@@ -8,7 +8,7 @@
 
 ## 📖 Project Overview
 
-**OrcaAgent** is an Agent development framework based on LangGraph, deeply integrating the rich ecosystem resources of LangChain/LangGraph. Built on industry best practices with necessary encapsulation, it provides rich Agent scenario templates and scaffolding tools.
+**OrcaKit** is an Agent development framework based on LangGraph, deeply integrating the rich ecosystem resources of LangChain/LangGraph. Built on industry best practices with necessary encapsulation, it provides rich Agent scenario templates and scaffolding tools.
 
 ### 🌟 Core Features
 
@@ -17,7 +17,7 @@
 
 ## 🎯 Planner Template Features
 
-This project is a Planner pattern-based Agent template provided by OrcaAgent, primarily based on the implementation pattern from [LangGraph Plan-and-Execute Tutorial](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb).
+This project is a Planner pattern-based Agent template provided by OrcaKit, primarily based on the implementation pattern from [LangGraph Plan-and-Execute Tutorial](https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/plan-and-execute/plan-and-execute.ipynb).
 
 ### ✨ Key Advantages
 
@@ -89,16 +89,16 @@ OPENAI_MODEL_NAME=your-model-name
 
 #### 1. Download CLI
 ```bash
-pip install orcaagent-cli
+pip install orcakit-cli
 ```
 
 #### 2. Use CLI to Download Existing Templates
 
 Download template [TEMPLATE] to path [PATH]:
 ```bash
-orcaagent new [PATH] [TEMPLATE]
+orcakit new [PATH] [TEMPLATE]
 ```
-You can also use `orcaagent new` command for interactive template selection
+You can also use `orcakit new` command for interactive template selection
 
 #### 3. Configure .env
 - Create `.env` in the downloaded template directory
@@ -118,60 +118,60 @@ pip install -e .
 ```
 Start debugging:
 ```bash
-orcaagent dev
+orcakit dev
 ```
 
 ### CLI Features
 
 #### Browse CLI Functions
 ```bash
-orcaagent --help
+orcakit --help
 ```
 
 #### Browse Existing Templates
 ```bash
-orcaagent template
+orcakit template
 ```
 
 #### Create Project Using Existing Templates
-1. `orcaagent new [PATH] [TEMPLATE]`
-2. You can also use `orcaagent new` command for interactive template selection
+1. `orcakit new [PATH] [TEMPLATE]`
+2. You can also use `orcakit new` command for interactive template selection
 
 #### Debug and Development
 Start lightweight local server for debugging:
 ```bash
-orcaagent dev
+orcakit dev
 ```
 
-#### Start Complete OrcaAgent Service with Local Docker
+#### Start Complete OrcaKit Service with Local Docker
 *Requires Docker installed and running locally*
 ```bash
-orcaagent up
+orcakit up
 ```
 
 #### Generate Dockerfile
 ```bash
-orcaagent dockerfile [SAVE_PATH]
+orcakit dockerfile [SAVE_PATH]
 ```
-Example: `orcaagent dockerfile Dockerfile`
+Example: `orcakit dockerfile Dockerfile`
 
 #### Generate Dockerfile and docker-compose.yml
 ```bash
-orcaagent dockerfile --config [CONFIG] --add-docker-compose ./Dockerfile
+orcakit dockerfile --config [CONFIG] --add-docker-compose ./Dockerfile
 ```
-Example: `orcaagent dockerfile --config orcaagent.json --add-docker-compose ./Dockerfile`
+Example: `orcakit dockerfile --config orcakit.json --add-docker-compose ./Dockerfile`
 
 #### Package and Build Image
 ```bash
-orcaagent build --tag [TAG TEXT]
+orcakit build --tag [TAG TEXT]
 ```
-Example: `orcaagent build --tag my-agent`
+Example: `orcakit build --tag my-agent`
 
 ## 🔧 Custom Configuration
 
 ### 1. Add MCP Server
 
-Add or remove MCP Servers in `src/react_agent/mcp_server_configs.py`:
+Add or remove MCP Servers in `src/planner_agent/mcp_server_configs.py`:
 
 ```python
 MCP_SERVERS = {
@@ -191,7 +191,7 @@ MCP_SERVERS = {
 
 ### 2. Add New Tools
 
-Extend Agent functionality in `src/react_agent/tools.py`:
+Extend Agent functionality in `src/planner_agent/tools.py`:
 
 ```python
 from langchain.tools import tool
@@ -216,7 +216,7 @@ model = "compatible_openai/DeepSeek-V3-0324"
 
 ### 4. Custom Prompts
 
-Update system prompts in `src/react_agent/prompts.py`:
+Update system prompts in `src/planner_agent/prompts.py`:
 
 ```python
 SYSTEM_PROMPT = """
@@ -226,7 +226,7 @@ You are a professional AI assistant specialized in handling...
 
 ### 5. Modify Reasoning Flow
 
-Adjust Agent's reasoning process in `src/react_agent/graph.py`:
+Adjust Agent's reasoning process in `src/planner_agent/graph.py`:
 - Modify ReAct loop
 - Add additional decision steps
 - Customize nodes and edges
@@ -237,7 +237,7 @@ Adjust Agent's reasoning process in `src/react_agent/graph.py`:
 react-agent/
 ├── src/
 │   ├── common/           # Common utilities and configurations
-│   └── react_agent/      # React Agent core code
+│   └── planner_agent/      # Planner Agent core code
 │       ├── graph.py      # Graph structure definition
 │       ├── tools.py      # Tool definitions
 │       ├── prompts.py    # Prompt templates
@@ -286,6 +286,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support and Feedback
 
 For questions or suggestions, please:
-- Submit an [Issue](https://github.com/OrcaAgent-AI/react-agent/issues)
+- Submit an [Issue](https://github.com/OrcaKit-AI/planner-agent/issues)
 - Send email to: jubaoliang@gmail.com
 - Join our community discussion group
